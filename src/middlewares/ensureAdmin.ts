@@ -1,5 +1,6 @@
 import { Request, Response, NextFunction } from 'express'
 import { getCustomRepository } from 'typeorm'
+import { RequestError } from '../errors/RequestError'
 import { UsersRepositories } from '../repositories/UsersRepositories'
 
 export async function ensureAdmin(
@@ -16,7 +17,5 @@ export async function ensureAdmin(
         return next()
     }
 
-    return res.status(401).json({ 
-        message: "User is not admin"
-    })
+    throw new RequestError("User Unathorized", 401)
 }

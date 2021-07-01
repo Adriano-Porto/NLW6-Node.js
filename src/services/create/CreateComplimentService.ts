@@ -1,4 +1,5 @@
 import { getCustomRepository } from "typeorm"
+import { RequestError } from "../../errors/RequestError"
 import { ComplimentsRepositories } from "../../repositories/ComplimentsRepositories"
 import { UsersRepositories } from "../../repositories/UsersRepositories"
 
@@ -22,13 +23,13 @@ class CreateComplimentService {
         const usersRepositories = getCustomRepository(UsersRepositories)
 
         if(user_sender === user_receiver) {
-            throw new Error("Can't make compliments for yourself")
+            throw new RequestError("Can't make compliments for yourself")
         }
 
         const userReceiver = await usersRepositories.findOne(user_receiver)
 
         if(!userReceiver) {
-            throw new Error("Receiver User does not exists")
+            throw new RequestError("Receiver User does not exists")
         }
 
         const compliment = complimentsRepositories.create({

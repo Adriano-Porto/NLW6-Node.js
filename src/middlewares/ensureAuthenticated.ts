@@ -1,5 +1,6 @@
 import { Request, Response, NextFunction } from 'express'
 import { verify } from 'jsonwebtoken'
+import { RequestError } from '../errors/RequestError'
 
 interface IPayload {
     sub: string;
@@ -15,7 +16,7 @@ export function ensureAuthenticated (
     const authToken = req.headers.authorization
 
     if(!authToken) {
-        return res.status(401).json({Message: "User Unathorized"})
+        throw new RequestError("User Unathorized", 401)
     }
 
     const [, token ] = authToken.split(" ")
@@ -34,7 +35,7 @@ export function ensureAuthenticated (
         return next()
 
     }catch (err) {
-        throw new Error("Invalid Token")
+        throw new RequestError("Invalid Token")
     }
 
 }
