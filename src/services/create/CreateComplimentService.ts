@@ -32,6 +32,14 @@ class CreateComplimentService {
             throw new RequestError("Receiver User does not exists")
         }
 
+        const complimentAlreadyExists = await complimentsRepositories.findOne({
+            where: { tag_id: tag_id, user_sender: user_sender}
+        })
+
+        if(complimentAlreadyExists) {
+            throw new RequestError("Compliment have already been made")
+        }
+
         const compliment = complimentsRepositories.create({
             tag_id,
             user_receiver,
